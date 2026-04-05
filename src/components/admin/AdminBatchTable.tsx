@@ -5,6 +5,7 @@ import { Search, Trash2, ChevronRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { formatProdDateShort } from "@/lib/date-utils";
 
 type Batch = {
   id: number; lotNumber: string; productionDate: string;
@@ -72,7 +73,7 @@ export default function AdminBatchTable() {
                   <td className="px-4 py-3 font-mono font-semibold text-teal-400 tracking-wide">{b.lotNumber}</td>
                   <td className="px-4 py-3 text-zinc-300">{b.customer.name}</td>
                   <td className="px-4 py-3 text-zinc-300">{b.product.name}</td>
-                  <td className="px-4 py-3 text-zinc-500 text-xs">{new Date(b.productionDate).toLocaleDateString()}</td>
+                  <td className="px-4 py-3 text-zinc-500 text-xs">{formatProdDateShort(b.productionDate)}</td>
                   <td className="px-4 py-3"><Badge variant={b.stage === 2 ? "success" : "secondary"}>{b.stage === 2 ? "Complete" : "Stage 1"}</Badge></td>
                   <td className="px-4 py-3">
                     {b.labTested ? <span className="flex items-center gap-1.5 text-xs text-amber-400"><span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />Lab</span> : <span className="text-zinc-700 text-xs">—</span>}
@@ -106,7 +107,7 @@ export default function AdminBatchTable() {
                 <Badge variant={b.stage === 2 ? "success" : "secondary"}>{b.stage === 2 ? "Complete" : "Stage 1"}</Badge>
               </div>
               <p className="text-sm text-zinc-300 mt-1.5">{b.product.name}</p>
-              <p className="text-xs text-zinc-500">{b.customer.name} · {new Date(b.productionDate).toLocaleDateString()} · by {b.createdBy.username}</p>
+              <p className="text-xs text-zinc-500">{b.customer.name} · {formatProdDateShort(b.productionDate)} · by {b.createdBy.username}</p>
               <div className="flex gap-2 mt-3">
                 <Link href={`/admin/batches/${b.id}`} className="flex-1">
                   <Button size="sm" variant="outline" className="w-full gap-1.5"><ChevronRight className="w-3.5 h-3.5" />Edit</Button>

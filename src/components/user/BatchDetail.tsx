@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ArrowLeft, Check, Lock, AlertCircle, CircleCheck } from "lucide-react";
+import { formatProdDate } from "@/lib/date-utils";
 
 type LabName = { id: number; name: string };
 type Batch = {
@@ -49,7 +50,7 @@ export default function BatchDetail({ batch, canEdit, isAdmin }: { batch: Batch;
     } catch { setError("Network error."); } finally { setSaving(false); }
   }
 
-  const prodDate = new Date(batch.productionDate);
+  const prodDate = batch.productionDate;
 
   return (
     <div className="max-w-2xl mx-auto space-y-4">
@@ -81,7 +82,7 @@ export default function BatchDetail({ batch, canEdit, isAdmin }: { batch: Batch;
             { label: "Customer", value: batch.customer.name },
             { label: "Product", value: batch.product.name },
             { label: "Family Code", value: `${batch.product.familyCode.code} — ${batch.product.familyCode.name}` },
-            { label: "Production Date", value: prodDate.toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" }) },
+            { label: "Production Date", value: formatProdDate(prodDate) },
           ].map(({ label, value }) => (
             <div key={label}>
               <p className="text-xs text-zinc-600 uppercase tracking-wider mb-1">{label}</p>

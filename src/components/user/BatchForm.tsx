@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ArrowLeft, AlertCircle } from "lucide-react";
+import { todayLocal } from "@/lib/date-utils";
 
 type Customer = { id: number; name: string };
 type Product = { id: number; name: string; familyCode: { code: string } };
@@ -17,7 +18,7 @@ export default function BatchForm() {
   const [products, setProducts] = useState<Product[]>([]);
   const [customerId, setCustomerId] = useState("");
   const [productId, setProductId] = useState("");
-  const [productionDate, setProductionDate] = useState(() => new Date().toISOString().slice(0, 10));
+  const [productionDate, setProductionDate] = useState(todayLocal);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 

@@ -5,6 +5,7 @@ import { Search, ChevronUp, ChevronDown, ArrowUpDown, ChevronRight } from "lucid
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { formatProdDateShort } from "@/lib/date-utils";
 
 type Batch = {
   id: number;
@@ -128,7 +129,7 @@ export default function BatchTable({ currentUserId, isAdmin }: { currentUserId?:
                     </td>
                     <td className="px-4 py-3 text-zinc-300">{batch.customer.name}</td>
                     <td className="px-4 py-3 text-zinc-300">{batch.product.name}</td>
-                    <td className="px-4 py-3 text-zinc-500 text-xs">{new Date(batch.productionDate).toLocaleDateString()}</td>
+                    <td className="px-4 py-3 text-zinc-500 text-xs">{formatProdDateShort(batch.productionDate)}</td>
                     <td className="px-4 py-3">
                       <Badge variant={batch.stage === 2 ? "success" : "secondary"}>
                         {batch.stage === 2 ? "Complete" : "Stage 1"}
@@ -178,7 +179,7 @@ export default function BatchTable({ currentUserId, isAdmin }: { currentUserId?:
                 </div>
                 <div className="mt-2 space-y-0.5">
                   <p className="text-sm text-zinc-300">{batch.product.name}</p>
-                  <p className="text-xs text-zinc-500">{batch.customer.name} · {new Date(batch.productionDate).toLocaleDateString()}</p>
+                  <p className="text-xs text-zinc-500">{batch.customer.name} · {formatProdDateShort(batch.productionDate)}</p>
                 </div>
                 {batch.labTested && (
                   <div className="mt-2 flex items-center gap-1.5 text-xs text-amber-400">

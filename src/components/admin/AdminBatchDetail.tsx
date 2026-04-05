@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ArrowLeft, Trash2, Save, Check, AlertCircle, CircleCheck } from "lucide-react";
+import { formatProdDate } from "@/lib/date-utils";
 
 type LabName = { id: number; name: string };
 type Batch = {
@@ -107,7 +108,7 @@ export default function AdminBatchDetail({ batch }: { batch: Batch }) {
         </div>
         <div>
           <p className="text-xs text-zinc-600 uppercase tracking-wider mb-1">Production Date</p>
-          <p className="text-sm text-zinc-300">{new Date(batch.productionDate).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })}</p>
+          <p className="text-sm text-zinc-300">{formatProdDate(batch.productionDate)}</p>
           <p className="text-xs text-zinc-600 mt-0.5">Cannot change — would alter the lot number</p>
         </div>
       </div>
