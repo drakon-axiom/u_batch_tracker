@@ -1,3 +1,4 @@
+"use client";
 import LookupManager from "@/components/admin/LookupManager";
 
 export default function LabNamesPage() {
