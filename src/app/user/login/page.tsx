@@ -4,8 +4,6 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Package2 } from "lucide-react";
-
 export default function UserLoginPage() {
   const router = useRouter();
   const [username, setUsername] = useState("");
@@ -45,10 +43,10 @@ export default function UserLoginPage() {
       <div className="relative w-full max-w-sm">
         {/* Logo */}
         <div className="flex flex-col items-center mb-8">
-          <div className="w-14 h-14 rounded-2xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center mb-4 shadow-lg shadow-teal-500/5">
-            <Package2 className="w-7 h-7 text-teal-400" />
+          <div className="w-10 h-10 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center mb-4">
+            <span className="text-sm font-bold font-mono text-teal-400 tracking-tight select-none">BT</span>
           </div>
-          <h1 className="text-2xl font-bold text-zinc-100 tracking-tight">Batch Tracker</h1>
+          <h1 className="text-xl font-semibold text-zinc-100 tracking-tight">Batch Tracker</h1>
           <p className="text-sm text-zinc-500 mt-1">Sign in to your account</p>
         </div>
 

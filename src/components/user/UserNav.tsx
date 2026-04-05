@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Package2, Plus, LogOut, ShieldCheck, Menu, X, LayoutGrid } from "lucide-react";
+import { Layers, Plus, LogOut, Lock, Menu, X, LayoutList } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -18,7 +18,7 @@ export default function UserNav({ username, isAdmin }: { username: string; isAdm
   }
 
   const navLinks = [
-    { href: "/user/dashboard", label: "All Batches", icon: LayoutGrid },
+    { href: "/user/dashboard", label: "All Batches", icon: LayoutList },
   ];
 
   return (
@@ -28,7 +28,7 @@ export default function UserNav({ username, isAdmin }: { username: string; isAdm
           {/* Logo */}
           <Link href="/user/dashboard" className="flex items-center gap-2.5 shrink-0">
             <div className="w-7 h-7 rounded-lg bg-teal-500/10 border border-teal-500/20 flex items-center justify-center">
-              <Package2 className="w-4 h-4 text-teal-400" />
+              <Layers className="w-3.5 h-3.5 text-teal-400" />
             </div>
             <span className="font-semibold text-zinc-100 text-sm hidden sm:block">Batch Tracker</span>
           </Link>
@@ -66,7 +66,7 @@ export default function UserNav({ username, isAdmin }: { username: string; isAdm
             {isAdmin && (
               <Link href="/admin/dashboard" className="hidden sm:block">
                 <Button size="sm" variant="outline" className="gap-1.5 border-indigo-500/30 text-indigo-400 hover:bg-indigo-500/10">
-                  <ShieldCheck className="w-3.5 h-3.5" />
+                  <Lock className="w-3.5 h-3.5" />
                   Admin
                 </Button>
               </Link>
@@ -110,7 +110,7 @@ export default function UserNav({ username, isAdmin }: { username: string; isAdm
                 onClick={() => setMobileOpen(false)}
                 className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-indigo-400 hover:bg-indigo-500/10 transition-colors"
               >
-                <ShieldCheck className="w-4 h-4" />
+                <Lock className="w-4 h-4" />
                 Switch to Admin
               </Link>
             )}

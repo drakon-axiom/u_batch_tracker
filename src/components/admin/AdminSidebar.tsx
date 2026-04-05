@@ -3,18 +3,18 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
-  ShieldCheck, LayoutDashboard, Users, UserCog,
-  Package, Tag, FlaskConical, LogOut, ExternalLink, Menu, X,
+  Lock, LayoutDashboard, Users, Settings2,
+  Layers, Hash, ClipboardList, LogOut, ArrowUpRight, Menu, X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: "/admin/dashboard",    label: "Dashboard",    icon: LayoutDashboard },
-  { href: "/admin/users",        label: "Users",        icon: UserCog },
+  { href: "/admin/users",        label: "Users",        icon: Settings2 },
   { href: "/admin/customers",    label: "Customers",    icon: Users },
-  { href: "/admin/products",     label: "Products",     icon: Package },
-  { href: "/admin/family-codes", label: "Family Codes", icon: Tag },
-  { href: "/admin/lab-names",    label: "Lab Names",    icon: FlaskConical },
+  { href: "/admin/products",     label: "Products",     icon: Layers },
+  { href: "/admin/family-codes", label: "Family Codes", icon: Hash },
+  { href: "/admin/lab-names",    label: "Lab Names",    icon: ClipboardList },
 ];
 
 function NavContent({ username, onNav, onLogout }: { username: string; onNav?: () => void; onLogout: () => void }) {
@@ -24,7 +24,7 @@ function NavContent({ username, onNav, onLogout }: { username: string; onNav?: (
       <div className="p-4 border-b border-zinc-800 shrink-0">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shrink-0">
-            <ShieldCheck className="w-4 h-4 text-indigo-400" />
+            <Lock className="w-3.5 h-3.5 text-indigo-400" />
           </div>
           <div className="min-w-0">
             <p className="text-sm font-semibold text-zinc-100">Admin</p>
@@ -60,7 +60,7 @@ function NavContent({ username, onNav, onLogout }: { username: string; onNav?: (
             onClick={onNav}
             className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/60 transition-colors"
           >
-            <ExternalLink className="w-4 h-4 shrink-0" />
+            <ArrowUpRight className="w-4 h-4 shrink-0" />
             User Portal
           </Link>
         </div>
@@ -100,7 +100,7 @@ export default function AdminSidebar({ username }: { username: string }) {
       <div className="md:hidden fixed top-0 left-0 right-0 z-50 h-14 bg-zinc-900/90 backdrop-blur-md border-b border-zinc-800 flex items-center justify-between px-4">
         <div className="flex items-center gap-2.5">
           <div className="w-7 h-7 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center">
-            <ShieldCheck className="w-4 h-4 text-indigo-400" />
+            <Lock className="w-3.5 h-3.5 text-indigo-400" />
           </div>
           <span className="font-semibold text-zinc-100 text-sm">Admin</span>
         </div>

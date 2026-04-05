@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
-import { Search, ChevronUp, ChevronDown, ChevronsUpDown, FlaskConical, ArrowRight } from "lucide-react";
+import { Search, ChevronUp, ChevronDown, ArrowUpDown, ChevronRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -50,7 +50,7 @@ export default function BatchTable({ currentUserId, isAdmin }: { currentUserId?:
   }
 
   function SortIcon({ field }: { field: SortField }) {
-    if (sortField !== field) return <ChevronsUpDown className="w-3 h-3 opacity-30" />;
+    if (sortField !== field) return <ArrowUpDown className="w-3 h-3 opacity-30" />;
     return sortDir === "asc" ? <ChevronUp className="w-3 h-3 text-teal-400" /> : <ChevronDown className="w-3 h-3 text-teal-400" />;
   }
 
@@ -136,7 +136,7 @@ export default function BatchTable({ currentUserId, isAdmin }: { currentUserId?:
                     </td>
                     <td className="px-4 py-3">
                       {batch.labTested
-                        ? <span className="flex items-center gap-1 text-xs text-amber-400"><FlaskConical className="w-3 h-3" />Tested</span>
+                        ? <span className="flex items-center gap-1.5 text-xs text-amber-400"><span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />Lab</span>
                         : <span className="text-zinc-700 text-xs">—</span>}
                     </td>
                     <td className="px-4 py-3 text-right">
@@ -173,7 +173,7 @@ export default function BatchTable({ currentUserId, isAdmin }: { currentUserId?:
                     <Badge variant={batch.stage === 2 ? "success" : "secondary"}>
                       {batch.stage === 2 ? "Complete" : "Stage 1"}
                     </Badge>
-                    <ArrowRight className="w-4 h-4 text-zinc-600" />
+                    <ChevronRight className="w-4 h-4 text-zinc-600" />
                   </div>
                 </div>
                 <div className="mt-2 space-y-0.5">
@@ -181,8 +181,8 @@ export default function BatchTable({ currentUserId, isAdmin }: { currentUserId?:
                   <p className="text-xs text-zinc-500">{batch.customer.name} · {new Date(batch.productionDate).toLocaleDateString()}</p>
                 </div>
                 {batch.labTested && (
-                  <div className="mt-2 flex items-center gap-1 text-xs text-amber-400">
-                    <FlaskConical className="w-3 h-3" />Lab tested
+                  <div className="mt-2 flex items-center gap-1.5 text-xs text-amber-400">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />Lab tested
                   </div>
                 )}
                 {canEdit && !isAdmin && (

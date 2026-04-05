@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, CheckCircle2, FlaskConical, Lock, AlertCircle } from "lucide-react";
+import { ArrowLeft, Check, Lock, AlertCircle, CircleCheck } from "lucide-react";
 
 type LabName = { id: number; name: string };
 type Batch = {
@@ -95,7 +95,6 @@ export default function BatchDetail({ batch, canEdit, isAdmin }: { batch: Batch;
       {canEdit && (
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
           <div className="flex items-center gap-2 mb-4">
-            <FlaskConical className="w-4 h-4 text-zinc-500" />
             <h2 className="text-sm font-semibold text-zinc-300 uppercase tracking-wider">Lab Results</h2>
             {stage1Locked && <Lock className="w-3.5 h-3.5 text-zinc-600 ml-auto" />}
           </div>
@@ -130,7 +129,7 @@ export default function BatchDetail({ batch, canEdit, isAdmin }: { batch: Batch;
                     className="sr-only peer"
                   />
                   <div className="w-5 h-5 rounded border border-zinc-700 bg-zinc-800 peer-checked:bg-teal-500 peer-checked:border-teal-500 transition-colors flex items-center justify-center">
-                    {labTested && <CheckCircle2 className="w-3.5 h-3.5 text-zinc-950" />}
+                    {labTested && <Check className="w-3 h-3 text-zinc-950" />}
                   </div>
                 </div>
                 <span className="text-sm text-zinc-300 group-hover:text-zinc-100 transition-colors">3rd party lab tested</span>
@@ -171,7 +170,7 @@ export default function BatchDetail({ batch, canEdit, isAdmin }: { batch: Batch;
               )}
               {success && (
                 <div className="flex items-center gap-2 text-sm text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded-lg px-3 py-2">
-                  <CheckCircle2 className="w-4 h-4 shrink-0" />
+                  <CircleCheck className="w-4 h-4 shrink-0" />
                   Saved! Returning to dashboard…
                 </div>
               )}
@@ -188,7 +187,6 @@ export default function BatchDetail({ batch, canEdit, isAdmin }: { batch: Batch;
       {!canEdit && (
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
           <div className="flex items-center gap-2 mb-4">
-            <FlaskConical className="w-4 h-4 text-zinc-500" />
             <h2 className="text-sm font-semibold text-zinc-300 uppercase tracking-wider">Lab Results</h2>
           </div>
           <div className="space-y-3">

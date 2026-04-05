@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ShieldCheck } from "lucide-react";
+import { Lock } from "lucide-react";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -37,10 +37,10 @@ export default function AdminLoginPage() {
 
       <div className="relative w-full max-w-sm">
         <div className="flex flex-col items-center mb-8">
-          <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mb-4 shadow-lg shadow-indigo-500/5">
-            <ShieldCheck className="w-7 h-7 text-indigo-400" />
+          <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mb-4">
+            <Lock className="w-4 h-4 text-indigo-400" />
           </div>
-          <h1 className="text-2xl font-bold text-zinc-100 tracking-tight">Admin Portal</h1>
+          <h1 className="text-xl font-semibold text-zinc-100 tracking-tight">Admin Portal</h1>
           <p className="text-sm text-zinc-500 mt-1">Sign in to manage the system</p>
         </div>
 

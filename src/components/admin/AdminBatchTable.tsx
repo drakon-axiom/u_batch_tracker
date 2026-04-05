@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
-import { Search, Trash2, FlaskConical, ArrowRight } from "lucide-react";
+import { Search, Trash2, ChevronRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -75,7 +75,7 @@ export default function AdminBatchTable() {
                   <td className="px-4 py-3 text-zinc-500 text-xs">{new Date(b.productionDate).toLocaleDateString()}</td>
                   <td className="px-4 py-3"><Badge variant={b.stage === 2 ? "success" : "secondary"}>{b.stage === 2 ? "Complete" : "Stage 1"}</Badge></td>
                   <td className="px-4 py-3">
-                    {b.labTested ? <span className="flex items-center gap-1 text-xs text-amber-400"><FlaskConical className="w-3 h-3" />Tested</span> : <span className="text-zinc-700 text-xs">—</span>}
+                    {b.labTested ? <span className="flex items-center gap-1.5 text-xs text-amber-400"><span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />Lab</span> : <span className="text-zinc-700 text-xs">—</span>}
                   </td>
                   <td className="px-4 py-3 text-zinc-600 text-xs">{b.createdBy.username}</td>
                   <td className="px-4 py-3">
@@ -109,7 +109,7 @@ export default function AdminBatchTable() {
               <p className="text-xs text-zinc-500">{b.customer.name} · {new Date(b.productionDate).toLocaleDateString()} · by {b.createdBy.username}</p>
               <div className="flex gap-2 mt-3">
                 <Link href={`/admin/batches/${b.id}`} className="flex-1">
-                  <Button size="sm" variant="outline" className="w-full gap-1.5"><ArrowRight className="w-3.5 h-3.5" />Edit</Button>
+                  <Button size="sm" variant="outline" className="w-full gap-1.5"><ChevronRight className="w-3.5 h-3.5" />Edit</Button>
                 </Link>
                 <Button size="sm" variant="destructive" className="h-8 w-8 p-0" onClick={() => handleDelete(b.id, b.lotNumber)} disabled={deletingId === b.id}>
                   <Trash2 className="w-3.5 h-3.5" />
