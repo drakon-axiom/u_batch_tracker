@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ShieldCheck } from "lucide-react";
@@ -15,8 +14,7 @@ export default function AdminLoginPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setError("");
-    setLoading(true);
+    setError(""); setLoading(true);
     try {
       const res = await fetch("/api/auth/admin/login", {
         method: "POST",
@@ -28,80 +26,75 @@ export default function AdminLoginPage() {
         router.refresh();
       } else {
         const data = await res.json();
-        setError(data.error?.message ?? "Login failed");
+        setError(data.error?.message ?? "Invalid credentials");
       }
-    } catch {
-      setError("Network error. Please try again.");
-    } finally {
-      setLoading(false);
-    }
+    } catch { setError("Network error — please try again."); } finally { setLoading(false); }
   }
 
   return (
-    <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
-      <div className="w-full max-w-sm">
-        <div className="bg-slate-800 rounded-xl border border-slate-700 shadow-xl p-8">
-          <div className="flex flex-col items-center mb-8">
-            <div className="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center mb-4">
-              <ShieldCheck className="w-6 h-6 text-white" />
-            </div>
-            <h1 className="text-xl font-semibold text-white">Admin Portal</h1>
-            <p className="text-sm text-slate-400 mt-1">Sign in to manage the system</p>
-          </div>
+    <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center p-4">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(99,102,241,0.07),transparent)] pointer-events-none" />
 
+      <div className="relative w-full max-w-sm">
+        <div className="flex flex-col items-center mb-8">
+          <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mb-4 shadow-lg shadow-indigo-500/5">
+            <ShieldCheck className="w-7 h-7 text-indigo-400" />
+          </div>
+          <h1 className="text-2xl font-bold text-zinc-100 tracking-tight">Admin Portal</h1>
+          <p className="text-sm text-zinc-500 mt-1">Sign in to manage the system</p>
+        </div>
+
+        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 shadow-2xl shadow-black/40">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1.5">
-              <Label htmlFor="username" className="text-slate-300">
-                Username
-              </Label>
+              <Label htmlFor="username">Username</Label>
               <Input
                 id="username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="Enter username"
+                placeholder="Admin username"
                 autoComplete="username"
+                autoFocus
                 required
-                className="bg-slate-700 border-slate-600 text-white placeholder:text-slate-400 focus-visible:ring-indigo-500"
+                className="focus-visible:ring-indigo-500/40 focus-visible:border-indigo-500/60"
               />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="password" className="text-slate-300">
-                Password
-              </Label>
+              <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter password"
+                placeholder="Admin password"
                 autoComplete="current-password"
                 required
-                className="bg-slate-700 border-slate-600 text-white placeholder:text-slate-400 focus-visible:ring-indigo-500"
+                className="focus-visible:ring-indigo-500/40 focus-visible:border-indigo-500/60"
               />
             </div>
 
             {error && (
-              <div className="text-sm text-red-400 bg-red-900/30 border border-red-800 rounded-md px-3 py-2">
+              <p className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
                 {error}
-              </div>
+              </p>
             )}
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full h-9 px-4 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md transition-colors disabled:opacity-50 disabled:pointer-events-none"
+              className="w-full h-10 bg-indigo-600 hover:bg-indigo-500 active:scale-[0.98] text-white text-sm font-semibold rounded-lg transition-all duration-150 disabled:opacity-40 disabled:pointer-events-none"
             >
               {loading ? "Signing in…" : "Sign in"}
             </button>
           </form>
-
-          <p className="text-xs text-center text-slate-500 mt-6">
-            User?{" "}
-            <a href="/user/login" className="underline hover:text-slate-300">
-              User portal
-            </a>
-          </p>
         </div>
+
+        <p className="text-xs text-center text-zinc-600 mt-6">
+          Not an admin?{" "}
+          <a href="/user/login" className="text-zinc-400 hover:text-zinc-200 transition-colors underline underline-offset-2">
+            User portal →
+          </a>
+        </p>
       </div>
     </div>
   );

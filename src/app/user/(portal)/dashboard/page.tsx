@@ -23,8 +23,8 @@ export default async function UserDashboard() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-semibold text-slate-900">All Batches</h1>
-          <p className="text-sm text-slate-500 mt-1">Track and manage production batches</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-zinc-100">All Batches</h1>
+          <p className="text-sm text-zinc-500 mt-0.5">Track and manage production batches</p>
         </div>
       </div>
       <BatchTable currentUserId={userId} isAdmin={isAdmin} />

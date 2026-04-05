@@ -138,8 +138,8 @@ export default function UsersPage() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-slate-900">Users</h1>
-          <p className="text-sm text-slate-500 mt-1">Manage user accounts and permissions</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-zinc-100">Users</h1>
+          <p className="text-sm text-zinc-500 mt-0.5">Manage user accounts and permissions</p>
         </div>
         <Button onClick={openAdd} className="gap-1.5">
           <Plus className="w-4 h-4" />
@@ -147,29 +147,29 @@ export default function UsersPage() {
         </Button>
       </div>
 
-      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+      <div className="bg-zinc-900 rounded-xl border border-zinc-800 overflow-hidden">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-slate-100 bg-slate-50">
-              <th className="text-left px-4 py-3 font-medium text-slate-500">Username</th>
-              <th className="text-left px-4 py-3 font-medium text-slate-500">Role</th>
-              <th className="text-left px-4 py-3 font-medium text-slate-500">Created</th>
+            <tr className="border-b border-zinc-800">
+              <th className="text-left px-4 py-3 text-xs font-medium text-zinc-500 uppercase tracking-wider">Username</th>
+              <th className="text-left px-4 py-3 text-xs font-medium text-zinc-500 uppercase tracking-wider">Role</th>
+              <th className="text-left px-4 py-3 text-xs font-medium text-zinc-500 uppercase tracking-wider">Created</th>
               <th className="px-4 py-3" />
             </tr>
           </thead>
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={4} className="px-4 py-12 text-center text-slate-400">Loading…</td>
+                <td colSpan={4} className="px-4 py-16 text-center text-zinc-600">Loading…</td>
               </tr>
             ) : users.length === 0 ? (
               <tr>
-                <td colSpan={4} className="px-4 py-12 text-center text-slate-400">No users found.</td>
+                <td colSpan={4} className="px-4 py-16 text-center text-zinc-600">No users found.</td>
               </tr>
             ) : (
               users.map((user) => (
-                <tr key={user.id} className="border-b border-slate-50 hover:bg-slate-50 transition-colors">
-                  <td className="px-4 py-3 font-medium text-slate-900 flex items-center gap-2">
+                <tr key={user.id} className="border-b border-zinc-800/60 hover:bg-zinc-800/30 transition-colors">
+                  <td className="px-4 py-3 font-medium text-zinc-100 flex items-center gap-2">
                     {user.role === "admin"
                       ? <ShieldCheck className="w-4 h-4 text-indigo-500 shrink-0" />
                       : <User className="w-4 h-4 text-slate-400 shrink-0" />
@@ -177,11 +177,11 @@ export default function UsersPage() {
                     {user.username}
                   </td>
                   <td className="px-4 py-3">
-                    <Badge variant={user.role === "admin" ? "default" : "secondary"}>
+                    <Badge variant={user.role === "admin" ? "indigo" : "secondary"}>
                       {user.role}
                     </Badge>
                   </td>
-                  <td className="px-4 py-3 text-slate-500">
+                  <td className="px-4 py-3 text-zinc-500 text-xs">
                     {new Date(user.createdAt).toLocaleDateString()}
                   </td>
                   <td className="px-4 py-3">
@@ -208,7 +208,7 @@ export default function UsersPage() {
         </table>
       </div>
 
-      <p className="text-xs text-slate-400 text-right">
+      <p className="text-xs text-zinc-600 text-right">
         {users.length} user{users.length !== 1 ? "s" : ""} · {adminCount} admin{adminCount !== 1 ? "s" : ""}
       </p>
 

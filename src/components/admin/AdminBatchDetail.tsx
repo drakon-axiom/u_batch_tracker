@@ -6,27 +6,15 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { ArrowLeft, Trash2, Save } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { ArrowLeft, Trash2, Save, CheckCircle2, AlertCircle, FlaskConical } from "lucide-react";
 
 type LabName = { id: number; name: string };
 type Batch = {
-  id: number;
-  lotNumber: string;
-  productionDate: string;
-  stage: number;
-  labTested: boolean;
-  labResults: string | null;
-  customer: { id: number; name: string };
-  product: { id: number; name: string; familyCode: { code: string; name: string } };
-  createdBy: { username: string };
-  labName: LabName | null;
+  id: number; lotNumber: string; productionDate: string; stage: number;
+  labTested: boolean; labResults: string | null;
+  customer: { id: number; name: string }; product: { id: number; name: string; familyCode: { code: string; name: string } };
+  createdBy: { username: string }; labName: LabName | null;
 };
 
 export default function AdminBatchDetail({ batch }: { batch: Batch }) {
@@ -51,37 +39,17 @@ export default function AdminBatchDetail({ batch }: { batch: Batch }) {
   }, []);
 
   async function handleSave() {
-    if (labTested && !labNameId) {
-      setError("Please select a lab name.");
-      return;
-    }
-    setError("");
-    setSaving(true);
+    if (labTested && !labNameId) { setError("Please select a lab name."); return; }
+    setError(""); setSaving(true);
     try {
       const res = await fetch(`/api/batches/${batch.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          customerId: Number(customerId),
-          productId: Number(productId),
-          stage: 2,
-          labTested,
-          labNameId: labTested ? Number(labNameId) : null,
-          labResults: labTested ? labResults || null : null,
-        }),
+        method: "PATCH", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ customerId: Number(customerId), productId: Number(productId), stage: 2, labTested, labNameId: labTested ? Number(labNameId) : null, labResults: labTested ? labResults || null : null }),
       });
       const data = await res.json();
-      if (res.ok) {
-        setSuccess("Saved successfully!");
-        setTimeout(() => setSuccess(""), 3000);
-      } else {
-        setError(data.error?.message ?? "Failed to save");
-      }
-    } catch {
-      setError("Network error.");
-    } finally {
-      setSaving(false);
-    }
+      if (res.ok) { setSuccess("Saved!"); setTimeout(() => setSuccess(""), 3000); }
+      else setError(data.error?.message ?? "Failed to save");
+    } catch { setError("Network error."); } finally { setSaving(false); }
   }
 
   async function handleDelete() {
@@ -89,151 +57,105 @@ export default function AdminBatchDetail({ batch }: { batch: Batch }) {
     setDeleting(true);
     try {
       const res = await fetch(`/api/batches/${batch.id}`, { method: "DELETE" });
-      if (res.ok) {
-        router.push("/admin/dashboard");
-        router.refresh();
-      } else {
-        const data = await res.json();
-        setError(data.error?.message ?? "Delete failed");
-      }
-    } finally {
-      setDeleting(false);
-    }
+      if (res.ok) { router.push("/admin/dashboard"); router.refresh(); }
+      else setError((await res.json()).error?.message ?? "Delete failed");
+    } finally { setDeleting(false); }
   }
 
   return (
-    <div className="max-w-2xl space-y-6">
+    <div className="max-w-2xl space-y-4">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <Link href="/admin/dashboard">
-            <Button variant="ghost" size="sm" className="gap-1.5">
-              <ArrowLeft className="w-4 h-4" />
-              Back
+            <Button variant="ghost" size="sm" className="gap-1.5 -ml-1">
+              <ArrowLeft className="w-4 h-4" /><span className="hidden sm:inline">Back</span>
             </Button>
           </Link>
-          <Badge variant={batch.stage === 2 ? "success" : "secondary"}>Stage {batch.stage}</Badge>
+          <Badge variant={batch.stage === 2 ? "success" : "secondary"}>
+            {batch.stage === 2 ? "Complete" : "Stage 1"}
+          </Badge>
         </div>
-        <Button
-          variant="destructive"
-          size="sm"
-          onClick={handleDelete}
-          disabled={deleting}
-          className="gap-1.5"
-        >
-          <Trash2 className="w-4 h-4" />
-          {deleting ? "Deleting…" : "Delete Batch"}
+        <Button variant="destructive" size="sm" onClick={handleDelete} disabled={deleting} className="gap-1.5">
+          <Trash2 className="w-3.5 h-3.5" />
+          {deleting ? "Deleting…" : <span className="hidden sm:inline">Delete</span>}
         </Button>
       </div>
 
       {/* Lot number hero */}
-      <div className="bg-slate-900 text-white rounded-xl p-6">
-        <p className="text-slate-400 text-xs uppercase tracking-wider mb-2">Lot Number</p>
-        <p className="font-mono text-4xl font-bold tracking-wide">{batch.lotNumber}</p>
-        <p className="text-slate-400 text-sm mt-2">Created by {batch.createdBy.username}</p>
+      <div className="bg-gradient-to-br from-zinc-900 via-zinc-900 to-indigo-950/20 border border-zinc-800 rounded-2xl p-6 sm:p-8">
+        <p className="text-xs text-zinc-500 uppercase tracking-widest mb-2 font-medium">Lot Number</p>
+        <p className="font-mono text-4xl sm:text-5xl font-bold text-teal-400 tracking-widest">{batch.lotNumber}</p>
+        <p className="text-xs text-zinc-600 mt-3">Created by {batch.createdBy.username}</p>
       </div>
 
-      {/* Stage 1 fields (admin can edit even after stage 2) */}
-      <div className="bg-white rounded-xl border border-slate-200 p-6 space-y-5">
-        <h2 className="font-semibold text-slate-900">Batch Details</h2>
-
+      {/* Stage 1 fields */}
+      <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5 space-y-4">
+        <h2 className="text-sm font-semibold text-zinc-300 uppercase tracking-wider">Batch Details</h2>
         <div className="space-y-1.5">
           <Label>Customer</Label>
           <Select value={customerId} onValueChange={setCustomerId}>
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {customers.map((c) => (
-                <SelectItem key={c.id} value={String(c.id)}>{c.name}</SelectItem>
-              ))}
-            </SelectContent>
+            <SelectTrigger><SelectValue /></SelectTrigger>
+            <SelectContent>{customers.map((c) => <SelectItem key={c.id} value={String(c.id)}>{c.name}</SelectItem>)}</SelectContent>
           </Select>
         </div>
-
         <div className="space-y-1.5">
           <Label>Product</Label>
           <Select value={productId} onValueChange={setProductId}>
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {products.map((p) => (
-                <SelectItem key={p.id} value={String(p.id)}>
-                  {p.name} <span className="text-slate-400 text-xs">({p.familyCode.code})</span>
-                </SelectItem>
-              ))}
-            </SelectContent>
+            <SelectTrigger><SelectValue /></SelectTrigger>
+            <SelectContent>{products.map((p) => <SelectItem key={p.id} value={String(p.id)}>{p.name} <span className="text-zinc-500 text-xs">({p.familyCode.code})</span></SelectItem>)}</SelectContent>
           </Select>
         </div>
-
         <div>
-          <p className="text-xs text-slate-400 uppercase tracking-wider mb-1">Production Date</p>
-          <p className="text-sm font-medium">
-            {new Date(batch.productionDate).toLocaleDateString(undefined, {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </p>
-          <p className="text-xs text-slate-400 mt-0.5">Production date cannot be changed (affects lot number)</p>
+          <p className="text-xs text-zinc-600 uppercase tracking-wider mb-1">Production Date</p>
+          <p className="text-sm text-zinc-300">{new Date(batch.productionDate).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })}</p>
+          <p className="text-xs text-zinc-600 mt-0.5">Cannot change — would alter the lot number</p>
         </div>
       </div>
 
       {/* Lab results */}
-      <div className="bg-white rounded-xl border border-slate-200 p-6 space-y-4">
-        <h2 className="font-semibold text-slate-900">Lab Results</h2>
-
-        <div className="flex items-center gap-3">
-          <input
-            type="checkbox"
-            id="lab-tested"
-            checked={labTested}
-            onChange={(e) => setLabTested(e.target.checked)}
-            className="w-4 h-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900"
-          />
-          <Label htmlFor="lab-tested" className="cursor-pointer">3rd party lab tested</Label>
+      <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5 space-y-4">
+        <div className="flex items-center gap-2">
+          <FlaskConical className="w-4 h-4 text-zinc-500" />
+          <h2 className="text-sm font-semibold text-zinc-300 uppercase tracking-wider">Lab Results</h2>
         </div>
-
+        <label className="flex items-center gap-3 cursor-pointer group">
+          <div className="relative">
+            <input type="checkbox" checked={labTested} onChange={(e) => setLabTested(e.target.checked)} className="sr-only peer" />
+            <div className="w-5 h-5 rounded border border-zinc-700 bg-zinc-800 peer-checked:bg-teal-500 peer-checked:border-teal-500 transition-colors flex items-center justify-center">
+              {labTested && <CheckCircle2 className="w-3.5 h-3.5 text-zinc-950" />}
+            </div>
+          </div>
+          <span className="text-sm text-zinc-300 group-hover:text-zinc-100 transition-colors">3rd party lab tested</span>
+        </label>
         {labTested && (
           <>
             <div className="space-y-1.5">
               <Label>Lab Name</Label>
               <Select value={labNameId} onValueChange={setLabNameId}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a lab" />
-                </SelectTrigger>
-                <SelectContent>
-                  {labNames.map((l) => (
-                    <SelectItem key={l.id} value={String(l.id)}>{l.name}</SelectItem>
-                  ))}
-                </SelectContent>
+                <SelectTrigger><SelectValue placeholder="Select lab" /></SelectTrigger>
+                <SelectContent>{labNames.map((l) => <SelectItem key={l.id} value={String(l.id)}>{l.name}</SelectItem>)}</SelectContent>
               </Select>
             </div>
             <div className="space-y-1.5">
               <Label>Test Results</Label>
-              <Textarea
-                value={labResults}
-                onChange={(e) => setLabResults(e.target.value)}
-                placeholder="Paste or type lab test results here…"
-                rows={5}
-              />
+              <Textarea value={labResults} onChange={(e) => setLabResults(e.target.value)} placeholder="Paste or type lab results…" rows={5} />
             </div>
           </>
         )}
       </div>
 
       {error && (
-        <div className="text-sm text-red-600 bg-red-50 border border-red-100 rounded-md px-3 py-2">
-          {error}
+        <div className="flex items-center gap-2 text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
+          <AlertCircle className="w-4 h-4 shrink-0" />{error}
         </div>
       )}
       {success && (
-        <div className="text-sm text-emerald-700 bg-emerald-50 border border-emerald-100 rounded-md px-3 py-2">
-          {success}
+        <div className="flex items-center gap-2 text-sm text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded-lg px-3 py-2">
+          <CheckCircle2 className="w-4 h-4 shrink-0" />{success}
         </div>
       )}
 
-      <Button onClick={handleSave} disabled={saving} className="w-full gap-2">
+      <Button onClick={handleSave} disabled={saving} variant="admin" className="w-full h-10 gap-2">
         <Save className="w-4 h-4" />
         {saving ? "Saving…" : "Save Changes"}
       </Button>

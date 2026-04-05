@@ -27,9 +27,9 @@ export default async function UserLayout({ children }: { children: React.ReactNo
   if (!username) redirect("/user/login");
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-zinc-950">
       <UserNav username={username} isAdmin={isAdmin} />
-      <main className="max-w-6xl mx-auto px-4 py-8">{children}</main>
+      <main className="max-w-6xl mx-auto px-4 py-6 sm:py-8">{children}</main>
     </div>
   );
 }
