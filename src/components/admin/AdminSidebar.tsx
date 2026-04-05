@@ -5,6 +5,7 @@ import {
   ShieldCheck,
   LayoutDashboard,
   Users,
+  UserCog,
   Package,
   Tag,
   FlaskConical,
@@ -15,6 +16,7 @@ import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/admin/users", label: "Users", icon: UserCog },
   { href: "/admin/customers", label: "Customers", icon: Users },
   { href: "/admin/products", label: "Products", icon: Package },
   { href: "/admin/family-codes", label: "Family Codes", icon: Tag },
