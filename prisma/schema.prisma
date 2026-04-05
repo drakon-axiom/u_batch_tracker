@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  username     String   @unique @db.VarChar(64)
+  passwordHash String   @map("password_hash")
+  role         String   @db.VarChar(10)
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  batches      Batch[]
+
+  @@map("users")
+}
+
+model FamilyCode {
+  id        Int       @id @default(autoincrement())
+  code      String    @unique @db.Char(2)
+  name      String    @db.VarChar(128)
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  products  Product[]
+
+  @@map("family_codes")
+}
+
+model Customer {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  batches   Batch[]
+
+  @@map("customers")
+}
+
+model Product {
+  id           Int        @id @default(autoincrement())
+  name         String     @unique @db.VarChar(255)
+  familyCodeId Int        @map("family_code_id")
+  createdAt    DateTime   @default(now()) @map("created_at") @db.Timestamptz()
+  familyCode   FamilyCode @relation(fields: [familyCodeId], references: [id])
+  batches      Batch[]
+
+  @@map("products")
+}
+
+model LabName {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  batches   Batch[]
+
+  @@map("lab_names")
+}
+
+model Batch {
+  id              Int      @id @default(autoincrement())
+  lotNumber       String   @unique @db.VarChar(8) @map("lot_number")
+  customerId      Int      @map("customer_id")
+  productId       Int      @map("product_id")
+  productionDate  DateTime @map("production_date") @db.Date
+  createdByUserId Int      @map("created_by_user_id")
+  stage           Int      @default(1) @db.SmallInt
+  labTested       Boolean  @default(false) @map("lab_tested")
+  labNameId       Int?     @map("lab_name_id")
+  labResults      String?  @map("lab_results")
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt       DateTime @updatedAt @map("updated_at") @db.Timestamptz()
+
+  customer  Customer @relation(fields: [customerId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
+  createdBy User     @relation(fields: [createdByUserId], references: [id])
+  labName   LabName? @relation(fields: [labNameId], references: [id])
+
+  @@map("batches")
+}
+
+model LotSequence {
+  familyCode     String   @db.Char(2) @map("family_code")
+  productionDate DateTime @db.Date @map("production_date")
+  lastLetter     String   @default("A") @db.Char(1) @map("last_letter")
+
+  @@id([familyCode, productionDate])
+  @@map("lot_sequences")
+}
