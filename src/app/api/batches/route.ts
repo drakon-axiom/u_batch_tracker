@@ -21,6 +21,7 @@ const createSchema = z.object({
   customerId: z.number().int().positive(),
   productId: z.number().int().positive(),
   productionDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be YYYY-MM-DD"),
+  notes: z.string().nullable().optional(),
 });
 
 export async function GET(req: NextRequest) {
@@ -61,7 +62,7 @@ export async function POST(req: NextRequest) {
     return err("VALIDATION_ERROR", parsed.error.issues[0].message, 400);
   }
 
-  const { customerId, productId, productionDate: dateStr } = parsed.data;
+  const { customerId, productId, productionDate: dateStr, notes } = parsed.data;
 
   // Verify customer and product exist
   const [customer, product] = await Promise.all([
@@ -92,6 +93,7 @@ export async function POST(req: NextRequest) {
       productionDate,
       createdByUserId: auth.payload.userId,
       stage: 1,
+      notes: notes ?? null,
     },
     include: batchInclude,
   });

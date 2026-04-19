@@ -67,6 +67,7 @@ model Batch {
   labTested       Boolean  @default(false) @map("lab_tested")
   labNameId       Int?     @map("lab_name_id")
   labResults      String?  @map("lab_results")
+  notes           String?
   createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz()
   updatedAt       DateTime @updatedAt @map("updated_at") @db.Timestamptz()
 

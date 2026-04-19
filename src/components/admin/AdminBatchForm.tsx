@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ArrowLeft, AlertCircle } from "lucide-react";
 import { todayLocal } from "@/lib/date-utils";
@@ -19,6 +20,7 @@ export default function AdminBatchForm() {
   const [customerId, setCustomerId] = useState("");
   const [productId, setProductId] = useState("");
   const [productionDate, setProductionDate] = useState(todayLocal);
+  const [notes, setNotes] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -34,7 +36,7 @@ export default function AdminBatchForm() {
     try {
       const res = await fetch("/api/batches", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ customerId: Number(customerId), productId: Number(productId), productionDate }),
+        body: JSON.stringify({ customerId: Number(customerId), productId: Number(productId), productionDate, notes: notes.trim() || null }),
       });
       const data = await res.json();
       if (res.ok) router.push(`/admin/batches/${data.data.id}`);
@@ -62,6 +64,10 @@ export default function AdminBatchForm() {
         <div className="space-y-1.5">
           <Label htmlFor="prod-date">Production Date</Label>
           <Input id="prod-date" type="date" value={productionDate} onChange={(e) => setProductionDate(e.target.value)} required />
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="notes">Notes</Label>
+          <Textarea id="notes" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Optional notes about this batch…" rows={4} />
         </div>
       </div>
 

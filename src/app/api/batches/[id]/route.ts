@@ -23,6 +23,7 @@ const updateSchema = z.object({
   labTested: z.boolean().optional(),
   labNameId: z.number().int().positive().nullable().optional(),
   labResults: z.string().nullable().optional(),
+  notes: z.string().nullable().optional(),
 });
 
 type Params = { params: Promise<{ id: string }> };
@@ -82,6 +83,7 @@ export async function PATCH(req: NextRequest, { params }: Params) {
       ...(data.labTested !== undefined && { labTested: data.labTested }),
       ...(data.labNameId !== undefined && { labNameId: data.labNameId }),
       ...(data.labResults !== undefined && { labResults: data.labResults }),
+      ...(data.notes !== undefined && { notes: data.notes }),
     },
     include: batchInclude,
   });

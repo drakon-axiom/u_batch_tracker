@@ -13,7 +13,7 @@ import { formatProdDate } from "@/lib/date-utils";
 type LabName = { id: number; name: string };
 type Batch = {
   id: number; lotNumber: string; productionDate: string;
-  stage: number; labTested: boolean; labResults: string | null;
+  stage: number; labTested: boolean; labResults: string | null; notes: string | null;
   customer: { name: string }; product: { name: string; familyCode: { code: string; name: string } };
   createdBy: { username: string }; labName: LabName | null;
 };
@@ -23,6 +23,7 @@ export default function BatchDetail({ batch, canEdit, isAdmin }: { batch: Batch;
   const [labTested, setLabTested] = useState(batch.labTested);
   const [labNameId, setLabNameId] = useState(batch.labName ? String(batch.labName.id) : "");
   const [labResults, setLabResults] = useState(batch.labResults ?? "");
+  const [notes, setNotes] = useState(batch.notes ?? "");
   const [labNames, setLabNames] = useState<LabName[]>([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -40,7 +41,7 @@ export default function BatchDetail({ batch, canEdit, isAdmin }: { batch: Batch;
       const res = await fetch(`/api/batches/${batch.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ stage: 2, labTested, labNameId: labTested ? Number(labNameId) : null, labResults: labTested ? labResults || null : null }),
+        body: JSON.stringify({ stage: 2, labTested, labNameId: labTested ? Number(labNameId) : null, labResults: labTested ? labResults || null : null, notes: notes.trim() || null }),
       });
       const data = await res.json();
       if (res.ok) {
@@ -90,6 +91,26 @@ export default function BatchDetail({ batch, canEdit, isAdmin }: { batch: Batch;
             </div>
           ))}
         </div>
+      </div>
+
+      {/* Notes section */}
+      <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
+        <div className="flex items-center gap-2 mb-4">
+          <h2 className="text-sm font-semibold text-zinc-300 uppercase tracking-wider">Notes</h2>
+          {stage1Locked && <Lock className="w-3.5 h-3.5 text-zinc-600 ml-auto" />}
+        </div>
+        {canEdit && !stage1Locked ? (
+          <Textarea
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            placeholder="Notes about this batch…"
+            rows={4}
+          />
+        ) : batch.notes ? (
+          <p className="text-sm text-zinc-300 whitespace-pre-wrap bg-zinc-800/50 rounded-lg p-3">{batch.notes}</p>
+        ) : (
+          <p className="text-sm text-zinc-600 italic">No notes.</p>
+        )}
       </div>
 
       {/* Lab results section */}
