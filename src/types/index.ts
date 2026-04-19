@@ -7,6 +7,7 @@ export type BatchWithRelations = {
   stage: number;
   labTested: boolean;
   labResults: string | null;
+  notes: string | null;
   createdAt: Date;
   updatedAt: Date;
   customer: { id: number; name: string };

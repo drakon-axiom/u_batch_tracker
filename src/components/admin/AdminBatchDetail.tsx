@@ -13,7 +13,7 @@ import { formatProdDate } from "@/lib/date-utils";
 type LabName = { id: number; name: string };
 type Batch = {
   id: number; lotNumber: string; productionDate: string; stage: number;
-  labTested: boolean; labResults: string | null;
+  labTested: boolean; labResults: string | null; notes: string | null;
   customer: { id: number; name: string }; product: { id: number; name: string; familyCode: { code: string; name: string } };
   createdBy: { username: string }; labName: LabName | null;
 };
@@ -23,6 +23,7 @@ export default function AdminBatchDetail({ batch }: { batch: Batch }) {
   const [labTested, setLabTested] = useState(batch.labTested);
   const [labNameId, setLabNameId] = useState(batch.labName ? String(batch.labName.id) : "");
   const [labResults, setLabResults] = useState(batch.labResults ?? "");
+  const [notes, setNotes] = useState(batch.notes ?? "");
   const [labNames, setLabNames] = useState<LabName[]>([]);
   const [customers, setCustomers] = useState<{ id: number; name: string }[]>([]);
   const [products, setProducts] = useState<{ id: number; name: string; familyCode: { code: string } }[]>([]);
@@ -45,7 +46,7 @@ export default function AdminBatchDetail({ batch }: { batch: Batch }) {
     try {
       const res = await fetch(`/api/batches/${batch.id}`, {
         method: "PATCH", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ customerId: Number(customerId), productId: Number(productId), stage: 2, labTested, labNameId: labTested ? Number(labNameId) : null, labResults: labTested ? labResults || null : null }),
+        body: JSON.stringify({ customerId: Number(customerId), productId: Number(productId), stage: 2, labTested, labNameId: labTested ? Number(labNameId) : null, labResults: labTested ? labResults || null : null, notes: notes.trim() || null }),
       });
       const data = await res.json();
       if (res.ok) { setSuccess("Saved!"); setTimeout(() => setSuccess(""), 3000); }
@@ -111,6 +112,12 @@ export default function AdminBatchDetail({ batch }: { batch: Batch }) {
           <p className="text-sm text-zinc-300">{formatProdDate(batch.productionDate)}</p>
           <p className="text-xs text-zinc-600 mt-0.5">Cannot change — would alter the lot number</p>
         </div>
+      </div>
+
+      {/* Notes */}
+      <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5 space-y-4">
+        <h2 className="text-sm font-semibold text-zinc-300 uppercase tracking-wider">Notes</h2>
+        <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Notes about this batch…" rows={4} />
       </div>
 
       {/* Lab results */}
